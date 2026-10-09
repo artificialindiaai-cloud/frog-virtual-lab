@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Virtual Frog Lab: Heart &amp; Muscle</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#eff6f1;--card:#fff;--line:#d3e3d9;--tx:#0d2318;--mut:#52705f;--a:#0f9d58;--b:#7c3aed;--c:#ea580c;--r:#dc2626}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#06110b;--card:#0c1c13;--line:#1b3326;--tx:#e6f5ec;--mut:#8db39d;--a:#4ade80;--b:#a78bfa;--c:#fb923c;--r:#f87171}}
+:root[data-theme="dark"]{--bg:#06110b;--card:#0c1c13;--line:#1b3326;--tx:#e6f5ec;--mut:#8db39d;--a:#4ade80;--b:#a78bfa;--c:#fb923c;--r:#f87171}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.hero{position:relative;overflow:hidden;padding:44px 20px 18px;text-align:center}
+.orb{position:absolute;width:340px;height:340px;border-radius:50%;filter:blur(70px);opacity:.4;background:radial-gradient(circle,var(--a),transparent 70%);top:-120px;left:50%;margin-left:-170px;animation:fl 8s ease-in-out infinite alternate}
+@keyframes fl{to{transform:translate(60px,40px) scale(1.2);opacity:.55}}
+.eyebrow{position:relative;letter-spacing:.2em;font-size:12px;color:var(--a);font-weight:700;margin:0}
+h1{position:relative;font-size:clamp(28px,7vw,50px);line-height:1.1;margin:8px 0 6px}
+h1 span{background:linear-gradient(90deg,var(--a),var(--b),var(--c));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{position:relative;color:var(--mut);margin:0}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;gap:8px;padding:10px 16px;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(10px)}
+nav button{flex:1;border:1px solid var(--line);background:var(--card);color:var(--tx);padding:10px 12px;border-radius:99px;font:600 14px inherit;cursor:pointer}
+nav button.on{background:linear-gradient(90deg,var(--a),var(--b));color:#fff;border-color:transparent}
+main{max-width:860px;margin:0 auto;padding:12px 16px 40px}section[hidden]{display:none}
+h2{margin:12px 0 4px;font-size:23px}.lead{color:var(--mut);margin:0 0 12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px;box-shadow:0 10px 40px -20px rgba(15,157,88,.4)}
+canvas,svg{width:100%;display:block;border-radius:12px}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center}
+.btn{border:1px solid var(--line);background:transparent;color:var(--tx);padding:9px 13px;border-radius:12px;font:600 13px inherit;cursor:pointer}
+.btn.p{background:var(--a);color:#05200f;border:0}.btn.d{background:var(--r);color:#fff;border:0}
+h3{font-size:13px;color:var(--a);margin:18px 0 0;text-transform:uppercase;letter-spacing:.08em;border-top:1px solid var(--line);padding-top:12px}
+label{font-size:14px;color:var(--mut);display:block}input[type=range]{width:100%;accent-color:var(--a);height:28px}.ctl{flex:1 1 200px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:8px;margin:8px 0}
+.st{border:1px solid var(--line);border-radius:12px;padding:8px 12px}.st b{display:block;font-size:19px}.st small{color:var(--mut)}
+.msg{border-left:4px solid var(--c);background:color-mix(in srgb,var(--c) 10%,transparent);padding:10px 14px;border-radius:0 12px 12px 0;margin:10px 0}
+.live{border-left-color:var(--a);background:color-mix(in srgb,var(--a) 12%,transparent)}
+.bar{height:10px;border-radius:9px;background:var(--line);overflow:hidden;margin:3px 0 8px}.bar i{display:block;height:100%;width:100%;background:var(--a);transition:width .2s}
+footer{text-align:center;color:var(--mut);font-size:13px;padding:20px}
+</style></head><body>
+<header class="hero"><div class="orb"></div><p class="eyebrow">AMPHIBIAN PRACTICAL · NO ANIMALS NEEDED</p><h1>Virtual <span>Frog Lab</span></h1><p class="sub">Frog heart and gastrocnemius muscle, with a live kymograph</p></header>
+<nav><button class="on" data-t="s1">🐸 Frog heart</button><button data-t="s2">💪 Frog muscle</button></nav>
+<main>
+<section id="s1"><h2>Frog heart experiments</h2><p class="lead">Atrial and ventricular tracings drawn live like a kymograph.</p>
+<div class="card"><svg id="hs" viewBox="0 0 320 120" style="max-height:130px"></svg>
+<canvas id="ac" style="aspect-ratio:700/200"></canvas><canvas id="hc" style="aspect-ratio:700/260"></canvas>
+<h3>Atrial parameters</h3><div class="stats"><div class="st"><b id="ar">45</b><small>Atrial rate (bpm)</small></div><div class="st"><b id="af">100%</b><small>Atrial force</small></div><div class="st"><b id="avd">–</b><small>A–V delay (ms)</small></div><div class="st"><b id="asd">–</b><small>Atrial systole (ms)</small></div></div>
+<h3>Ventricular parameters</h3><div class="stats"><div class="st"><b id="hrr">45</b><small>Ventricular rate (bpm)</small></div><div class="st"><b id="amp">100%</b><small>Force of contraction</small></div><div class="st"><b id="stt" style="font-size:15px">Normal</b><small>State</small></div></div>
+<h3>Drugs and solutions</h3><div class="row" id="drugs"><button class="btn" data-d="n">Normal Ringer</button><button class="btn" data-d="cold">Cold (10°C)</button><button class="btn" data-d="warm">Warm (40°C)</button><button class="btn" data-d="adr">Adrenaline</button><button class="btn" data-d="ach">Acetylcholine</button><button class="btn" data-d="atr">Atropine</button><button class="btn" data-d="nic">Nicotine</button><button class="btn" data-d="nacl">NaCl (excess)</button><button class="btn" data-d="ca">Excess Ca²⁺</button><button class="btn" data-d="k">Excess K⁺</button></div>
+<h3>Procedures</h3><div class="row"><button class="btn d" id="vag">⚡ Vagal stimulation</button><button class="btn" id="s1b">Stannius ligature 1</button><button class="btn" id="s2b">Stannius ligature 2</button></div>
+<h3>Extrasystole and compensatory pause</h3><div class="row"><button class="btn p" id="stm">⚡ Stimulate now</button><button class="btn" data-ph=".25">In systole (25%)</button><button class="btn" data-ph=".6">Early diastole (60%)</button><button class="btn" data-ph=".9">Late diastole (90%)</button></div>
+<div class="stats"><div class="st"><b id="ec">–</b><small>Coupling interval (s)</small></div><div class="st"><b id="ep">–</b><small>Compensatory pause (s)</small></div><div class="st"><b id="ecy">–</b><small>Normal cycle (s)</small></div><div class="st"><b id="esum" style="font-size:14px">–</b><small>Coupling + pause</small></div></div>
+<div class="msg live" id="hm">Press a stimulus button. In systole nothing happens. In diastole you get an extrasystole, then a compensatory pause.</div></div>
+<div class="msg"><b>Properties of extrasystole:</b> (1) It occurs only if the stimulus falls in diastole, because cardiac muscle has a long refractory period during systole. (2) It is weaker when earlier. (3) It is followed by a <b>compensatory pause</b>, because the next pacemaker beat falls in its refractory period; coupling interval + pause = 2 normal cycles. (4) The beat after the pause is stronger (post-extrasystolic potentiation). (5) Atria are unaffected, because the stimulus is applied to the ventricle. (6) Cardiac muscle cannot be tetanised.</div>
+<div class="msg"><b>Drug pearls:</b> Cold ↓rate. Warm ↑rate (but ↓force). Adrenaline ↑rate and force. ACh ↓rate and force, and ↑A–V delay. Atropine blocks muscarinic receptors, so ACh and vagal stimulation no longer work. Nicotine first stimulates vagal ganglia (slowing), then blocks them and releases catecholamines (acceleration). Excess NaCl antagonises Ca²⁺ and stops the heart in diastole. Ca²⁺ → systolic arrest. K⁺ → diastolic arrest.</div></section>
+
+<section id="s2" hidden><h2>Frog gastrocnemius–sciatic nerve</h2><p class="lead">Change stimulus, temperature, load and fatigue. Read the myogram.</p>
+<div class="card"><svg id="ms" viewBox="0 0 320 110" style="max-height:120px"></svg><canvas id="mcv" style="aspect-ratio:700/300"></canvas>
+<div class="stats"><div class="st"><b id="ff">0.00</b><small>Force (twitch units)</small></div><div class="st"><b id="fs" style="font-size:14px">–</b><small>Stimulus</small></div><div class="st"><b id="fp" style="font-size:14px">–</b><small>Pattern</small></div><div class="st"><b id="fd">–</b><small>Twitch duration (ms)</small></div></div>
+<h3>1. Single stimulus, strength and frequency</h3>
+<div class="row"><div class="ctl"><label>Stimulus strength: <b id="mvv">1.0</b> V</label><input id="mv" type="range" min="0" max="3" step=".1" value="1"></div><button class="btn p" id="one">⚡ Single stimulus</button></div>
+<div class="row"><div class="ctl"><label>Frequency: <b id="mfv">10</b> Hz</label><input id="mf" type="range" min="1" max="60" value="10"></div><button class="btn d" id="tr">▶ Start train</button></div>
+<h3>2. Two successive stimuli</h3>
+<div class="row"><div class="ctl"><label>Interval between stimuli: <b id="miv2">60</b> ms</label><input id="miv" type="range" min="1" max="300" value="60"></div><button class="btn p" id="twoB">⚡⚡ Give two stimuli</button></div><div class="msg live" id="mm">Try 3 ms (refractory), 60 ms (summation) and 250 ms (two separate twitches).</div>
+<h3>3. Effect of temperature</h3>
+<div class="row"><div class="ctl"><label>Temperature: <b id="mtv">20</b> °C</label><input id="mt" type="range" min="5" max="40" value="20"></div></div><div class="msg live">Cold: larger and longer twitch (slow kinetics). Warm: shorter, smaller twitch. Watch the twitch duration box above.</div>
+<h3>4. Effect of load: free load vs after-load</h3>
+<canvas id="lc" style="aspect-ratio:700/260"></canvas>
+<div class="row"><button class="btn p" data-lt="free">Free load</button><button class="btn" data-lt="after">After-load</button><div class="ctl"><label>Load: <b id="ldv">10</b> g</label><input id="ld" type="range" min="0" max="40" value="10"></div></div>
+<div class="row"><button class="btn d" id="lf">⚡ Lift</button><button class="btn" id="lcl">Clear curves</button></div>
+<div class="stats"><div class="st"><b id="lsh">–</b><small>Shortening</small></div><div class="st"><b id="lwk">–</b><small>Work done</small></div><div class="st"><b id="llt">–</b><small>Extra latent period</small></div></div><div class="msg live" id="lm">Record curves at different loads and compare. Record both types at the same load.</div>
+<h3>5. Genesis of fatigue</h3>
+<div class="row"><label style="display:flex;gap:6px;align-items:center"><input id="mdir" type="checkbox"> Stimulate muscle directly (bypass nerve and junction)</label><button class="btn" id="rs">😴 Rest</button></div>
+<label>ACh stores at the neuromuscular junction</label><div class="bar"><i id="bj"></i></div><label>Muscle energy (ATP / phosphocreatine)</label><div class="bar"><i id="bm"></i></div><label>Lactic acid and K⁺ in muscle</label><div class="bar"><i id="bl" style="background:var(--r);width:0"></i></div>
+<div class="stats"><div class="st"><b id="ft">0%</b><small>Total fatigue</small></div></div><div class="msg live" id="fmsg">Start a train at 2–5 Hz and watch the force fall.</div></div>
+<div class="msg"><b>Pearls:</b> Two stimuli: second ignored in the absolute refractory period (about 3 ms), summation if it falls during the first twitch, separate twitches if later. After-load: the muscle first contracts isometrically until tension equals the load, so latent period rises and shortening falls as load rises. Free load stretches the muscle first and changes initial length. Work = load × shortening, so it is zero at no load and zero at maximal load. <b>Fatigue</b> is first at the neuromuscular junction (ACh depletion), then in the muscle (ATP/PCr fall, lactic acid, K⁺ rise).</div></section>
+</main><footer>For educational use only. Models are simplified.</footer>
+<script>
+const $=s=>document.querySelector(s),V=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x==b));document.querySelectorAll('section').forEach(s=>s.hidden=s.id!=b.dataset.t)});
+const fit=c=>{const d=devicePixelRatio||1,r=c.getBoundingClientRect();if(r.width&&c.width!=Math.round(r.width*d)){c.width=Math.round(r.width*d);c.height=Math.round(r.height*d)}return c.width/700};
+function trace(c,hist,stm,Y,col,lab,h){const s=fit(c);if(!s)return;const x=c.getContext('2d');x.setTransform(s,0,0,s,0,0);x.clearRect(0,0,700,h);x.strokeStyle=V('--line');x.lineWidth=1;x.fillStyle=V('--mut');x.font='11px system-ui';
+for(let k=0;k<7;k++){x.beginPath();x.moveTo(k*117,0);x.lineTo(k*117,h);x.stroke()}x.beginPath();x.moveTo(0,Y(0));x.lineTo(700,Y(0));x.stroke();x.fillText(lab,8,16);x.fillText('time →',650,h-6);
+x.beginPath();hist.forEach((v,i)=>i?x.lineTo(i,Y(v)):x.moveTo(i,Y(v)));x.strokeStyle=col;x.lineWidth=3;x.lineJoin='round';x.stroke();
+x.fillStyle=V('--r');stm.forEach((m,i)=>{if(m){x.beginPath();x.moveTo(i,h-26);x.lineTo(i-5,h-14);x.lineTo(i+5,h-14);x.fill()}})}
+/* ---------- FROG HEART ---------- */
+const H={t:0,hr:45,amp:1,base:0,tH:45,tA:1,tB:0,dk:.11,tdk:.11,mode:'beat',vbs:-9,vP:1.3,ba:1,pbs:-9,aP:1.3,np:.5,vag:0,st:0,atro:0,pot:0,arm:0,tst:0,ex:null,res:null,vq:[],hist:[],ah:[],stm:[],tm:[]};
+const sh=(u,P)=>{const tr=.22*P,td=.5*P;return u<0?0:u<tr?Math.sin(Math.PI/2*u/tr):u<tr+td?.5*(1+Math.cos(Math.PI*(u-tr)/td)):0};
+const canF=()=>H.t-H.vbs>.52*H.vP,hm=t=>$('#hm').innerHTML=t;
+function vbeat(a,es){H.vbs=H.t;H.vP=60/Math.max(5,H.hr);H.ba=a||1;if(!es&&H.arm){H.tst=H.t+H.arm*H.vP;H.arm=0}}
+const NM={n:'Normal Ringer',cold:'Cold: slow, strong',warm:'Warm 40°C: fast, weak',adr:'Adrenaline: faster, stronger',ach:'Acetylcholine: slow, weak',atr:'Atropine: vagal block',nic:'Nicotine',nacl:'Excess NaCl',ca:'Excess Ca²⁺',k:'Excess K⁺'};
+const PR={n:[45,1,.11],cold:[24,.9,.11],warm:[95,.65,.1],adr:[75,1.4,.08],ach:[20,.5,.17],atr:[55,1,.1],nic:[20,.6,.15],nacl:[30,.6,.12],ca:[55,1.25,.11],k:[32,.6,.11]};
+function setD(d){H.tm.forEach(clearTimeout);H.tm=[];H.mode='beat';H.tB=0;H.st=0;let key=d;if(d=='n')H.atro=0;if(d=='atr')H.atro=1;if(d=='ach'&&H.atro)key='atr';[H.tH,H.tA,H.tdk]=PR[key];$('#stt').textContent=NM[d]+(H.atro&&d!='atr'?' (atropinised)':'');
+const T=(f,ms)=>H.tm.push(setTimeout(f,ms));
+const M={n:'Normal Ringer restored.',cold:'Cold slows the rate and prolongs systole.',warm:'40°C: rate rises but force falls and the heart tires.',adr:'Adrenaline: ↑rate and ↑force (β1), A–V delay shortens.',atr:'Atropine blocks muscarinic receptors: slight ↑rate (vagal tone removed). ACh and vagal stimulation now fail.',ach:H.atro?'ACh has <b>no effect</b>: atropine blocks the muscarinic receptors.':'ACh: ↓rate, ↓force and longer A–V delay (muscarinic M2).'};
+if(d=='ca'){hm('Calcium: stronger beats, then arrest in <b>systole</b> (calcium rigor).');T(()=>{H.mode='sys';H.tB=.9;$('#stt').textContent='Systolic arrest (Ca²⁺ rigor)'},6000)}
+else if(d=='k'){hm('Potassium: weaker beats, then arrest in <b>diastole</b>.');T(()=>{H.mode='dia';H.tB=0;$('#stt').textContent='Diastolic arrest (K⁺)'},5000)}
+else if(d=='nacl'){hm('Excess Na⁺ antagonises Ca²⁺: weak beats, then arrest in <b>diastole</b>. Normal Ringer restores it.');T(()=>{H.mode='dia';$('#stt').textContent='Diastolic arrest (NaCl)'},6000)}
+else if(d=='nic'){if(H.atro){H.tH=70;H.tA=1.2;hm('Atropine blocks the muscarinic slowing, so only the later <b>acceleration</b> shows.')}else{hm('Nicotine: first stimulates vagal ganglia (<b>slowing</b>), then blocks them and releases adrenaline (<b>acceleration</b>).');T(()=>{H.tH=75;H.tA=1.25;H.tdk=.09},6000)}}
+else hm(M[d])}
+document.querySelectorAll('#drugs button').forEach(b=>b.onclick=()=>setD(b.dataset.d));
+$('#vag').onclick=()=>{if(H.atro){hm('Vagal stimulation has <b>no effect</b>: the muscarinic receptors are blocked by atropine.');return}H.vag=H.t+4.5;hm('Vagal stimulation: the heart <b>stops in diastole</b>, then <b>escapes</b> and resumes beating.')};
+function stim(){H.stm[H.stm.length-1]=1;if(H.mode=='sys'){hm('Calcium rigor: no response.');return}
+if(!canF()){hm('Stimulus in <b>systole</b>: no response (absolute refractory period). Cardiac muscle cannot be tetanised.');return}
+const u=H.t-H.vbs,P=H.vP;if(H.mode=='beat'){const a=Math.min(1,.35+.65*u/P);H.ex={c:u,t:H.t};vbeat(a,1);hm(`Extrasystole ${u.toFixed(2)} s after the last beat (${Math.round(u/P*100)}% of the cycle). Force ${Math.round(a*100)}%. The next pacemaker beat falls in its refractory period, so a <b>compensatory pause</b> follows.`)}
+else{vbeat(.8,1);hm('The arrested ventricle responds to a stimulus with one beat.')}}
+$('#stm').onclick=stim;document.querySelectorAll('[data-ph]').forEach(b=>b.onclick=()=>{const p=+b.dataset.ph,at=H.vbs+p*H.vP;if(at>H.t){H.tst=at}else{H.arm=p}hm(`Stimulus set for ${Math.round(p*100)}% of the cycle.`)});
+$('#s1b').onclick=()=>{H.tm.forEach(clearTimeout);H.mode='dia';H.tB=0;H.st=1;$('#stt').textContent='1st ligature: atria and ventricle stop';hm('First Stannius ligature: atria and ventricle <b>stop</b> in diastole. The sinus keeps beating.')};
+$('#s2b').onclick=()=>{if(H.st!=1){hm('Apply the <b>1st ligature</b> first.');return}H.st=2;hm('Second ligature: after a pause the ventricle beats at its own <b>slow rhythm</b>. Atria stay stopped.');H.tm.push(setTimeout(()=>{H.mode='own';H.tH=12;H.tA=.7;H.np=H.t;$('#stt').textContent='Ventricle: own slow rhythm'},2500))};
+function hstep(dt){H.t+=dt;const k=1-Math.exp(-dt*1.2);H.hr+=(H.tH-H.hr)*k;H.amp+=(H.tA-H.amp)*k;H.dk+=(H.tdk-H.dk)*k;H.base+=(H.tB-H.base)*(1-Math.exp(-dt*.6));
+const P=60/Math.max(5,H.hr);
+if(H.mode=='beat'){if(H.t>=H.np){if(H.t>H.vag){H.pbs=H.t;H.aP=P;H.vq.push(H.t+H.dk*P)}H.np+=P}}else if(H.mode=='own'){if(H.t>=H.np){H.vq.push(H.t);H.np+=P}}else H.np=H.t+.5;
+if(H.vq.length&&H.t>=H.vq[0]){H.vq.shift();if(canF()){let a=1;if(H.pot){a=1.25;H.pot=0}if(H.ex){H.res={c:H.ex.c,p:H.t-H.ex.t,P:H.vP};H.ex=null}vbeat(a)}else if(H.ex)H.pot=1}
+if(H.tst&&H.t>=H.tst){H.tst=0;stim()}
+const vy=H.base+H.amp*H.ba*sh(H.t-H.vbs,H.vP),ay=H.base+.6*H.amp*sh(H.t-H.pbs,H.aP);
+H.hist.push(vy);H.ah.push(ay);H.stm.length<H.hist.length&&H.stm.push(0);if(H.hist.length>700){H.hist.shift();H.ah.shift();H.stm.shift()}
+const run=(H.mode=='beat'&&H.t>H.vag)||H.mode=='own',arun=H.mode=='beat'&&H.t>H.vag;
+$('#hrr').textContent=run?Math.round(H.hr):0;$('#ar').textContent=arun?Math.round(H.hr):0;$('#amp').textContent=Math.round(H.amp*100)+'%';$('#af').textContent=arun?Math.round(H.amp*100)+'%':'0%';
+$('#avd').textContent=arun?Math.round(H.dk*P*1000):'–';$('#asd').textContent=arun?Math.round(.72*P*1000):'–';
+if(H.res){const r=H.res;$('#ec').textContent=r.c.toFixed(2);$('#ep').textContent=r.p.toFixed(2);$('#ecy').textContent=r.P.toFixed(2);$('#esum').textContent=(r.c+r.p).toFixed(2)+' s ≈ 2×'+r.P.toFixed(2)}
+const v=$('#vv');if(v){const fv=Math.min(1,vy),fa=Math.min(1,ay*1.6);v.setAttribute('rx',40*(1-.3*fv));v.setAttribute('ry',36*(1-.3*fv));v.setAttribute('opacity',.55+.4*fv);$('#aa').setAttribute('ry',22*(1-.35*fa));$('#aa').setAttribute('opacity',.6+.3*fa)}}
+$('#hs').innerHTML=`<circle cx="40" cy="55" r="16" fill="var(--b)"/><ellipse id="aa" cx="110" cy="55" rx="30" ry="22" fill="var(--c)" opacity=".8"/><ellipse id="vv" cx="215" cy="55" rx="40" ry="36" fill="var(--r)"/><text x="40" y="92" text-anchor="middle" fill="var(--mut)" font-size="11">Sinus venosus</text><text x="110" y="96" text-anchor="middle" fill="var(--mut)" font-size="11">Atria</text><text x="215" y="108" text-anchor="middle" fill="var(--mut)" font-size="11">Ventricle</text>`;
+/* ---------- FROG MUSCLE ---------- */
+const M={t:0,fj:0,fm:0,n:0,train:false,nt:0,ls:-9,st:[],hist:[],stm:[],pend:[]};
+const tp=()=>{const T=+$('#mt').value,sf=2**((T-20)/10);return{lat:.012/sf,tc:.05/sf,tr:.1/sf,amp:Math.max(.5,Math.min(1.4,1+.02*(20-T)))}};
+const TW=(u,l,tc,tr)=>{u-=l;return u<0?0:u<tc?(1-Math.cos(Math.PI*u/tc))/2:u<tc+tr?(1+Math.cos(Math.PI*(u-tc)/tr))/2:0};
+function fire(at){if(at-M.ls<.004)return;const v=+$('#mv').value,d=$('#mdir').checked,rec=v<.5?0:Math.min(1,(v-.5)/1.5),tf=1-.3*Math.exp(-M.n/3);
+M.st.push({t:at,a:rec*tf*(d?1:1-M.fj)*(1-M.fm)*tp().amp});M.n++;if(!d)M.fj=Math.min(.9,M.fj+.03);M.fm=Math.min(.7,M.fm+.008);M.ls=at;M.stm[M.stm.length-1]=1}
+$('#one').onclick=()=>fire(M.t);$('#mv').oninput=e=>$('#mvv').textContent=(+e.target.value).toFixed(1);$('#mf').oninput=e=>$('#mfv').textContent=e.target.value;$('#mt').oninput=e=>$('#mtv').textContent=e.target.value;$('#miv').oninput=e=>$('#miv2').textContent=e.target.value;
+$('#tr').onclick=e=>{M.train=!M.train;M.nt=M.t;e.target.textContent=M.train?'⏹ Stop train':'▶ Start train'};$('#rs').onclick=()=>{M.fj=0;M.fm=0;M.n=0};
+$('#twoB').onclick=()=>{const iv=+$('#miv').value,q=tp(),dur=(q.lat+q.tc+q.tr)*1000;fire(M.t);M.pend.push(M.t+iv/1000);
+$('#mm').innerHTML=iv<4?'Interval '+iv+' ms: the second stimulus falls in the <b>absolute refractory period</b>, so there is no extra response.':iv<dur?'Interval '+iv+' ms: the second stimulus arrives during the first twitch, so the twitches <b>summate</b> (higher peak).':'Interval '+iv+' ms: the first twitch is over, so you see <b>two separate twitches</b>.'};
+let sf='';function mstep(){M.t+=.005;const f=+$('#mf').value,q=tp();M.stm.push(0);if(M.train&&M.t>=M.nt){fire(M.t);M.nt+=1/f}
+while(M.pend.length&&M.t>=M.pend[0])fire(M.pend.shift());
+if(M.t-M.ls>1){M.fj=Math.max(0,M.fj-.002);M.fm=Math.max(0,M.fm-.0003)}if(M.t-M.ls>3)M.n=0;
+const tr=q.tr*(1+1.5*M.fm);M.st=M.st.filter(s=>M.t-s.t<.9);let S=0;M.st.forEach(s=>S+=s.a*TW(M.t-s.t,q.lat,q.tc,tr));const F=3*Math.tanh(S/3);M.hist.push(F);if(M.hist.length>700){M.hist.shift();M.stm.shift()}
+const v=+$('#mv').value,tot=1-(1-M.fj)*(1-M.fm),d=$('#mdir').checked;$('#ff').textContent=F.toFixed(2);$('#fs').textContent=v<.5?'Subthreshold':v<2?'Submaximal':v<2.1?'Maximal':'Supramaximal';
+$('#fp').textContent=!M.train?'Single / two stimuli':f<6?'Separate twitches':f<30?'Summation / incomplete tetanus':'Complete tetanus';$('#fd').textContent=Math.round((q.lat+q.tc+tr)*1000);
+$('#ft').textContent=Math.round(tot*100)+'%';$('#bj').style.width=(1-M.fj)*100+'%';$('#bm').style.width=(1-M.fm)*100+'%';$('#bl').style.width=M.fm/.7*100+'%';
+const m=tot<.12?'Fresh muscle. Start a train at 2–5 Hz.':!d&&M.fj>.3?'Force is falling through the nerve: the <b>neuromuscular junction</b> (ACh depletion) fatigues first. Now tick "stimulate muscle directly": the muscle still contracts.':d&&M.fm>.15?'Direct stimulation: the remaining fatigue is in the <b>muscle</b> (ATP/PCr fall, lactic acid and K⁺ rise).':'Fatigue developing...';if(m!=sf){sf=m;$('#fmsg').innerHTML=m}
+const rx=90-F*14,ry=20+F*7;$('#mb').setAttribute('rx',rx);$('#mb').setAttribute('ry',ry);$('#t1').setAttribute('x2',160-rx);$('#t2').setAttribute('x1',160+rx)}
+$('#ms').innerHTML=`<line id="t1" x1="15" y1="50" x2="70" y2="50" stroke="var(--mut)" stroke-width="5" stroke-linecap="round"/><line id="t2" x1="250" y1="50" x2="305" y2="50" stroke="var(--mut)" stroke-width="5" stroke-linecap="round"/><ellipse id="mb" cx="160" cy="50" rx="90" ry="20" fill="var(--r)" opacity=".8"/><text x="160" y="100" text-anchor="middle" fill="var(--mut)" font-size="11">Gastrocnemius (shortens and bulges)</text>`;
+/* ---------- LOAD ---------- */
+let LT='free',LR=[],LI=0;document.querySelectorAll('[data-lt]').forEach(b=>b.onclick=()=>{LT=b.dataset.lt;document.querySelectorAll('[data-lt]').forEach(x=>x.classList.toggle('p',x==b))});
+$('#ld').oninput=e=>$('#ldv').textContent=e.target.value;$('#lcl').onclick=()=>{LR=[];$('#lm').textContent='Curves cleared.'};
+$('#lf').onclick=()=>{const F=+$('#ld').value,q=tp(),x=LT=='free'?F/8:0,Po=40*(1+.06*x-.012*x*x),thr=F/Po,pts=[];let pk=0,t0=null;
+for(let i=0;i<=100;i++){const u=i*.005,a=TW(u,q.lat,q.tc,q.tr),s=thr>=1?0:10*Math.max(0,a-thr);pts.push(s);pk=Math.max(pk,s);if(t0===null&&a>thr)t0=u}
+LR.push({pts,col:['--c','--b','--r','--a'][LI++%4],lab:F+' g '+(LT=='free'?'free':'after')});if(LR.length>4)LR.shift();
+const lat=thr>=1?null:Math.round(((t0||0)-q.lat)*1000);$('#lsh').textContent=pk.toFixed(1)+' mm';$('#lwk').textContent=Math.round(F*pk)+' g·mm';$('#llt').textContent=lat===null?'No lift':lat+' ms';
+$('#lm').innerHTML=LT=='free'?`<b>Free load ${F} g:</b> the load stretches the resting muscle by about ${x.toFixed(1)} mm first, which changes the active force (length–tension). Shortening ${pk.toFixed(1)} mm.`:`<b>After-load ${F} g:</b> the muscle contracts isometrically until its tension equals the load, then lifts it. Extra latent period ${lat===null?'–':lat+' ms'}, shortening ${pk.toFixed(1)} mm, work ${Math.round(F*pk)} g·mm.`};
+function ldraw(){const c=$('#lc'),s=fit(c);if(!s)return;const x=c.getContext('2d'),Y=v=>230-v*20,X=u=>40+u*1300;x.setTransform(s,0,0,s,0,0);x.clearRect(0,0,700,260);x.font='11px system-ui';x.strokeStyle=V('--line');x.fillStyle=V('--mut');x.lineWidth=1;
+[0,5,10].forEach(v=>{x.beginPath();x.moveTo(40,Y(v));x.lineTo(690,Y(v));x.stroke();x.fillText(v,12,Y(v)+4)});x.fillText('Shortening (mm)',8,16);x.fillText('time (s) →',620,252);
+LR.forEach((r,j)=>{x.beginPath();r.pts.forEach((v,i)=>i?x.lineTo(X(i*.005),Y(v)):x.moveTo(X(i*.005),Y(v)));x.strokeStyle=V(r.col);x.lineWidth=3;x.stroke();x.fillStyle=V(r.col);x.fillText('● '+r.lab,100+j*140,16)})}
+let last=performance.now();(function loop(n){const dt=Math.min(.05,(n-last)/1000);last=n;
+if(!$('#s1').hidden||H.hist.length<2){hstep(dt);trace($('#ac'),H.ah,[],v=>175-v*120,V('--b'),'Atrial contraction',200);trace($('#hc'),H.hist,H.stm,v=>235-v*125,V('--a'),'Ventricular contraction',260)}
+if(!$('#s2').hidden){mstep();trace($('#mcv'),M.hist,M.stm,v=>285-v/3*250,V('--c'),'Muscle force (myogram)',300);ldraw()}
+requestAnimationFrame(loop)})(last);
+</script></body></html>
